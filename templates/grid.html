@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <div class="row">
+        {% for movie in movies %}
+        <div class="col-lg-3 mt-4">
+            <div class="card">
+                <img class="card-img-top" src="{{ movie.image }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.name }}</h5>
+                </div>
+                {% if session.name %}
+                <div class="card-body">
+                    <a href="{{ url_for('create_user_like', movie_id=movie.api_id) }}" class="card-link">Like</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
