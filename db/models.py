@@ -3,10 +3,15 @@ from sqlalchemy import Column, DateTime, String, Integer, Float, ForeignKey, fun
 
 from db.base import Base, inverse_relationship, create_tables 
 
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
 
+# add your models here
+
+class User(Base):
+    
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    
     name = Column(String)
     email = Column(String, unique=True)
     password = Column(String)
@@ -15,7 +20,9 @@ class User(Base):
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 class Movie(Base):
+
     __tablename__ = 'movies'
+
     id = Column(Integer, primary_key=True)
 
     api_id = Column(Integer, unique=True)
@@ -23,17 +30,19 @@ class Movie(Base):
     name = Column(String)
     image = Column(String)
 
-    def parse_json(self, obj):
-        self.url = obj['show']['url']
-        self.api_id = obj['show']['id']
-        self.name = obj['show']['name']
-        if obj['show']['image'] != 'null':
-            self.image = obj['show']['image']['medium']
-        else:
-            self.image = ''
+    def parse_json(self, data):
+        self.api_id = data['show']['id']
+        self.url = data['show']['url']
+        self.name = data['show']['name']
+        try:
+            self.image = data['show']['image']['medium']
+        except:
+            self.image = None
 
 class Like(Base):
+
     __tablename__ = 'likes'
+
     id = Column(Integer, primary_key=True)
 
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -44,3 +53,7 @@ class Like(Base):
 
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+
+if __name__ != '__main__':
+    create_tables()

@@ -3,13 +3,17 @@
         {% for movie in movies %}
         <div class="col-lg-3 mt-4">
             <div class="card">
-                <img class="card-img-top" src="{{ movie.movie.image }}" alt="Card image cap">
+                {% if movie.movie.image %}
+                    <img class="card-img-top img-responsive" src="{{ movie.movie.image }}" alt="{{ movie.name }}">
+                {% else %}
+                    <img class="card-img-top img-responsive" src="{{url_for('static', filename='img/no-image.jpg')}}" alt="{{ movie.name }}">
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ movie.movie.name }}</h5>
                 </div>
                 {% if session.name %}
                 <div class="card-body">
-                    <a href="{{ url_for('delete_user_like', movie_id=movie.id) }}" class="card-link">Unlike</a>
+                    <a href="{{ url_for('delete_user_like', movie_id=movie.movie.api_id) }}" class="card-link">Unlike</a>
                 </div>
                 {% endif %}
             </div>
